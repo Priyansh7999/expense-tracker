@@ -3,10 +3,14 @@ package com.priyansh.expense_tracker.service;
 import com.priyansh.expense_tracker.dto.CreateExpenseRequest;
 import com.priyansh.expense_tracker.entity.Expense;
 import com.priyansh.expense_tracker.entity.ExpenseCategory;
+import com.priyansh.expense_tracker.entity.PaymentMethod;
 import com.priyansh.expense_tracker.exception.ResourceNotFoundException;
 import com.priyansh.expense_tracker.repository.ExpenseCategoryRepository;
 import com.priyansh.expense_tracker.repository.ExpenseRepository;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class ExpenseService {
@@ -34,5 +38,18 @@ public class ExpenseService {
         expense.setCategory(category);
 
         return expenseRepository.save(expense);
+    }
+
+    public List<Expense> getAllExpense(PaymentMethod paymentMethod, LocalDate transactionDate, String category){
+        if(paymentMethod!=null){
+            return expenseRepository.findByPaymentMethod(paymentMethod);
+        }
+        if (transactionDate != null) {
+            return expenseRepository.findByTransactionDate(transactionDate);
+        }
+        if (category != null) {
+            return expenseRepository.findByCategory_Name(category);
+        }
+        return expenseRepository.findAll();
     }
 }
