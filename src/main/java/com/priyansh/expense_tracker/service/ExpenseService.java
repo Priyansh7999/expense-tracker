@@ -24,12 +24,12 @@ public class ExpenseService {
         this.categoryRepository = categoryRepository;
     }
 
-    public Expense createExpense(CreateExpenseRequest request){
+    public Expense createExpense(CreateExpenseRequest request) {
         //get category
         ExpenseCategory category = categoryRepository
                 .findById(request.getCategoryId())
                 .orElseThrow(
-                        ()-> new ResourceNotFoundException("Category Not Found"));
+                        () -> new ResourceNotFoundException("Category Not Found"));
         //create expense
         Expense expense = new Expense();
         expense.setTitle(request.getTitle());
@@ -42,8 +42,8 @@ public class ExpenseService {
         return expenseRepository.save(expense);
     }
 
-    public List<Expense> getAllExpense(PaymentMethod paymentMethod, LocalDate transactionDate, String category){
-        if(paymentMethod!=null){
+    public List<Expense> getAllExpense(PaymentMethod paymentMethod, LocalDate transactionDate, String category) {
+        if (paymentMethod != null) {
             return expenseRepository.findByPaymentMethod(paymentMethod);
         }
         if (transactionDate != null) {
@@ -63,7 +63,7 @@ public class ExpenseService {
                         ));
     }
 
-    public void deleteExpenseById(Long id){
+    public void deleteExpenseById(Long id) {
         Expense expense = expenseRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException(
@@ -73,28 +73,48 @@ public class ExpenseService {
         expenseRepository.delete(expense);
     }
 
-    public Expense updateExpense(Long id, UpdateExpenseRequest request){
+    public Expense updateExpense(Long id, UpdateExpenseRequest request) {
         Expense expense = getExpenseById(id);
+
         if (request.getTitle() != null) {
+            if (request.getTitle().trim().isEmpty()) {
+                throw new IllegalArgumentException("Title cannot be blank");
+            }
             expense.setTitle(request.getTitle());
         }
+
         if (request.getDescription() != null) {
+            if (request.getDescription().trim().isEmpty()) {
+                throw new IllegalArgumentException("Description cannot be blank");
+            }
             expense.setDescription(request.getDescription());
         }
-        if (request.getAmount() != 0) {
+
+        if (request.getAmount() != null) {
+            if (request.getAmount() <= 0) {
+                throw new IllegalArgumentException("Amount must be positive");
+            }
             expense.setAmount(request.getAmount());
         }
+
         if (request.getPaymentMethod() != null) {
             expense.setPaymentMethod(request.getPaymentMethod());
         }
+
         if (request.getTransactionDate() != null) {
+            if (request.getTransactionDate().isAfter(LocalDate.now())) {
+                throw new IllegalArgumentException("Transaction date cannot be in future");
+            }
             expense.setTransactionDate(request.getTransactionDate());
         }
-        if(request.getCategoryId()!=null){
-            ExpenseCategory expenseCategory =
-                    categoryRepository.findById(request.getCategoryId()).orElseThrow(()-> new ResourceNotFoundException("Category Not Found"));
+
+        if (request.getCategoryId() != null) {
+            ExpenseCategory expenseCategory = categoryRepository.findById(request.getCategoryId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Category Not Found"));
             expense.setCategory(expenseCategory);
         }
+
         return expenseRepository.save(expense);
     }
 }
+
