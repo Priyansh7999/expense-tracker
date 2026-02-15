@@ -13,7 +13,7 @@ import java.time.LocalDate;
 public class CreateExpenseRequest {
 
     @Pattern(regexp = "^[A-Za-z ].*$", message = "Title must be a valid string")
-    @NotBlank(message = "Title os required")
+    @NotBlank(message = "Title is required")
     @Size(max=100)
     private String title;
 
@@ -23,17 +23,17 @@ public class CreateExpenseRequest {
     private String description;
 
     @NotNull
-    @DecimalMin(value = "0.01", message = "Amount must be positive")
+    @DecimalMin(value = "0.01", message = "Amount is required and must be positive")
     @Positive
     private double amount;
 
-    @NotNull
+    @NotNull(message = "category is required")
     private Long categoryId;
 
-    @NotNull
+    @NotNull(message = "payment method is required")
     private PaymentMethod paymentMethod;
 
     @NotNull
-    @PastOrPresent
+    @PastOrPresent(message = "Transaction date should be in the past or in the present")
     private LocalDate transactionDate;
 }
