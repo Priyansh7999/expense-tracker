@@ -1,12 +1,16 @@
 package com.priyansh.expense_tracker.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "expense")
+@Getter
+@Setter
 public class Expense {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
