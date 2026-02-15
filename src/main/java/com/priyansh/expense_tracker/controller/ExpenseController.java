@@ -1,6 +1,7 @@
 package com.priyansh.expense_tracker.controller;
 
 import com.priyansh.expense_tracker.dto.CreateExpenseRequest;
+import com.priyansh.expense_tracker.dto.UpdateExpenseRequest;
 import com.priyansh.expense_tracker.entity.Expense;
 import com.priyansh.expense_tracker.entity.PaymentMethod;
 import com.priyansh.expense_tracker.service.ExpenseService;
@@ -47,5 +48,10 @@ public class ExpenseController {
     public ResponseEntity<Expense> deleteExpenseById(@PathVariable Long id){
         expenseService.deleteExpenseById(id);
         return ResponseEntity.noContent().build();
+    }
+    @PatchMapping("/{id}")
+    public ResponseEntity<Expense> updateExpenseById(@PathVariable Long id,@Valid @RequestBody UpdateExpenseRequest request){
+        Expense expense = expenseService.updateExpense(id,request);
+        return ResponseEntity.status(HttpStatus.OK).body(expense);
     }
 }
