@@ -3,6 +3,7 @@ package com.priyansh.expense_tracker.service;
 import com.priyansh.expense_tracker.dto.CreateExpenseRequest;
 import com.priyansh.expense_tracker.entity.Expense;
 import com.priyansh.expense_tracker.entity.ExpenseCategory;
+import com.priyansh.expense_tracker.exception.ResourceNotFoundException;
 import com.priyansh.expense_tracker.repository.ExpenseCategoryRepository;
 import com.priyansh.expense_tracker.repository.ExpenseRepository;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class ExpenseService {
         ExpenseCategory category = categoryRepository
                 .findById(request.getCategoryId())
                 .orElseThrow(
-                        ()-> new RuntimeException("Category Not Found"));
+                        ()-> new ResourceNotFoundException("Category Not Found"));
         //create expense
         Expense expense = new Expense();
         expense.setTitle(request.getTitle());
