@@ -62,4 +62,14 @@ public class ExpenseService {
                         ));
     }
 
+    public void deleteExpenseById(Long id){
+        Expense expense = expenseRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Expense not found with id: " + id
+                        ));
+
+        expenseRepository.delete(expense);
+    }
+
 }

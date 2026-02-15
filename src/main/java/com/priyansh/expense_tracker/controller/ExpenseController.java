@@ -42,4 +42,10 @@ public class ExpenseController {
         Expense expense = expenseService.getExpenseById(id);
         return ResponseEntity.status(HttpStatus.OK).body(expense);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Expense> deleteExpenseById(@PathVariable Long id){
+        expenseService.deleteExpenseById(id);
+        return ResponseEntity.noContent().build();
+    }
 }
