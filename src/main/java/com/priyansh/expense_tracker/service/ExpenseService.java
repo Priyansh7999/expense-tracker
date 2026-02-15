@@ -1,6 +1,7 @@
 package com.priyansh.expense_tracker.service;
 
 import com.priyansh.expense_tracker.dto.CreateExpenseRequest;
+import com.priyansh.expense_tracker.dto.UpdateExpenseRequest;
 import com.priyansh.expense_tracker.entity.Expense;
 import com.priyansh.expense_tracker.entity.ExpenseCategory;
 import com.priyansh.expense_tracker.entity.PaymentMethod;
@@ -72,4 +73,28 @@ public class ExpenseService {
         expenseRepository.delete(expense);
     }
 
+    public Expense updateExpense(Long id, UpdateExpenseRequest request){
+        Expense expense = getExpenseById(id);
+        if (request.getTitle() != null) {
+            expense.setTitle(request.getTitle());
+        }
+        if (request.getDescription() != null) {
+            expense.setDescription(request.getDescription());
+        }
+        if (request.getAmount() != 0) {
+            expense.setAmount(request.getAmount());
+        }
+        if (request.getPaymentMethod() != null) {
+            expense.setPaymentMethod(request.getPaymentMethod());
+        }
+        if (request.getTransactionDate() != null) {
+            expense.setTransactionDate(request.getTransactionDate());
+        }
+        if(request.getCategoryId()!=null){
+            ExpenseCategory expenseCategory =
+                    categoryRepository.findById(request.getCategoryId()).orElseThrow(()-> new ResourceNotFoundException("Category Not Found"));
+            expense.setCategory(expenseCategory);
+        }
+        return expenseRepository.save(expense);
+    }
 }
