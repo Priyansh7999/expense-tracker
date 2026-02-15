@@ -50,7 +50,7 @@ public class ExpenseController {
         return ResponseEntity.noContent().build();
     }
     @PatchMapping("/{id}")
-    public ResponseEntity<Expense> updateExpenseById(@PathVariable Long id,@RequestBody UpdateExpenseRequest request){
+    public ResponseEntity<Expense> updateExpenseById(@PathVariable Long id,@Valid @RequestBody UpdateExpenseRequest request){
         Expense expense = expenseService.updateExpense(id,request);
         return ResponseEntity.status(HttpStatus.OK).body(expense);
     }
