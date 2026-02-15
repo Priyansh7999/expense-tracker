@@ -2,10 +2,14 @@ package com.priyansh.expense_tracker.dto;
 
 import com.priyansh.expense_tracker.entity.PaymentMethod;
 import jakarta.validation.constraints.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+@Getter
+@Setter
 public class CreateExpenseRequest {
 
     @NotBlank
